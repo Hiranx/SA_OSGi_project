@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TestProducerEnvironment
+Bundle-SymbolicName: TestPublisherEnvironment
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: testproducerenvironment.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-22
+Automatic-Module-Name: TestProducerEnvironment
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy

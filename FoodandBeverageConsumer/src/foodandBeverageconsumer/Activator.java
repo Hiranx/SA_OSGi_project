@@ -1,34 +1,75 @@
 package foodandBeverageconsumer;
 
-import foodandBeverageproducer.IFoodandBeverageService;
+import java.util.Scanner;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import foodandBeverageproducer.IFoodandBeverageService;
+import foodinventorypublisher.FoodInventoryService;
+
 public class Activator implements BundleActivator {
 
-    private ServiceReference<IFoodandBeverageService> serviceReference;
-    private IFoodandBeverageService foodandbeverageService;
+    private ServiceReference foodServiceReference;
+    private ServiceReference inventoryServiceReference;
 
     public void start(BundleContext context) throws Exception {
         System.out.println("---Start Food and Beverage Consumer Service---");
+        
+        foodServiceReference = context.getServiceReference(IFoodandBeverageService.class.getName());
+        if (foodServiceReference == null) {
+            System.out.println("Error: Food and Beverage Service is not available.");
+            return;
+        }
+        IFoodandBeverageService foodService = (IFoodandBeverageService) context.getService(foodServiceReference);
 
-        // Get the registered service from OSGi
-        serviceReference = context.getServiceReference(IFoodandBeverageService.class);
-        foodandbeverageService = context.getService(serviceReference);
+        inventoryServiceReference = context.getServiceReference(FoodInventoryService.class.getName());
+        if (inventoryServiceReference == null) {
+            System.out.println("Error: Food Inventory Service is not available.");
+            return;
+        }
+        FoodInventoryService inventoryService = (FoodInventoryService) context.getService(inventoryServiceReference);
+        displayMenu(foodService, inventoryService);
+    }
 
-        if (foodandbeverageService != null) {
-            System.out.println("Successfully connected to Food and Beverage Service!");
-            foodandbeverageService.addFoodsAndbeverages(); // Example call
-        } else {
-            System.out.println("Failed to retrieve Food and Beverage Service.");
+    private void displayMenu(IFoodandBeverageService foodService, FoodInventoryService inventoryService) {
+        Scanner scanner = new Scanner(System.in);
+        int option;
+        
+        while (true) {
+            System.out.println("\n----------  Food and Beverage Management System  ----------\n");
+            System.out.println("[1] - Order Food and Beverages");
+            System.out.println("[2] - Access Inventory System");
+            System.out.println("[3] - Exit");
+            System.out.println("\n--------------------------------------------------------------");
+            System.out.print("\nChoose an option: ");
+            
+            option = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            
+            switch (option) {
+                case 1:
+                    foodService.addFoodsAndbeverages();
+                    break;
+                case 2:
+                   inventoryService.openInventoryMenu();
+                    break;
+                case 3:
+                    System.out.println("Exiting Food and Beverage Consumer Service...");
+                    return;
+                default:
+                    System.out.println("Invalid choice! Please enter 1, 2, or 3.");
+            }
         }
     }
 
     public void stop(BundleContext context) throws Exception {
         System.out.println("---Stopping Food and Beverage Consumer Service---");
-        if (serviceReference != null) {
-            context.ungetService(serviceReference);
+        if (foodServiceReference != null) {
+            context.ungetService(foodServiceReference);
+        }
+        if (inventoryServiceReference != null) {
+            context.ungetService(inventoryServiceReference);
         }
     }
 }

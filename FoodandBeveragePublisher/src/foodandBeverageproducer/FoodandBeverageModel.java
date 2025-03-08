@@ -1,7 +1,9 @@
 package foodandBeverageproducer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FoodandBeverageModel {
 	
@@ -10,16 +12,17 @@ public class FoodandBeverageModel {
 	private String PackageName;
 	private float TotalBill;
   
-	private List<Integer> Addfoods= new ArrayList<>();
+	private Map<Integer, Integer> foodOrders = new HashMap<>();
     
     
-    public void addFood(int foodCode) {
-    	Addfoods.add(foodCode);
-    }
+	 public void addFood(int foodCode, int quantity) {
+	        foodOrders.put(foodCode, foodOrders.getOrDefault(foodCode, 0) + quantity);
+	    }
 
-    public List<Integer> getFoods() {
-        return Addfoods;
-    }
+	    public Map<Integer, Integer> getFoods() {
+	        return foodOrders;
+	    }
+
     
 	public int getId() {
 		return id;

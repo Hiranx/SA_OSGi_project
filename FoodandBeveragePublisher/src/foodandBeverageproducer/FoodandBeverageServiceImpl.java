@@ -21,8 +21,10 @@ public class FoodandBeverageServiceImpl implements IFoodandBeverageService {
         System.out.println("[3] Burgers : Rs.1750.00");
         System.out.println("[4] CocaCola : Rs.100.00");
         System.out.println("[5] CreamSoda : Rs.200.00");
+        System.out.println("[6] Exit ");
         System.out.println();
         System.out.println("Add your Order - Enter Food Code");
+        
 
         do {
             System.out.print("Enter Food number: ");

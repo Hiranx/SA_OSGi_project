@@ -56,6 +56,7 @@ public class Activator implements BundleActivator {
                     break;
                 case 3:
                     System.out.println("Exiting Food and Beverage Consumer Service...");
+                    displayMenu( foodService,  inventoryService);
                     return;
                 default:
                     System.out.println("Invalid choice! Please enter 1, 2, or 3.");

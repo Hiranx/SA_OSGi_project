@@ -21,7 +21,7 @@ public class Activator implements BundleActivator {
 
 		    IFoodandBeverageService service = new FoodandBeverageServiceImpl(inventoryService);
 		    
-		    // 🔹 Registering the service
+		    
 		    serviceRegistration = context.registerService(IFoodandBeverageService.class.getName(), service, null);
 		    
 		    System.out.println("Food and Beverage Service Registered Successfully.");

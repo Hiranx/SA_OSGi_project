@@ -45,6 +45,7 @@ public class FoodandBeverageServiceImpl implements IFoodandBeverageService {
 
             System.out.print("Do You Want to Add More Foods? (y/n): ");
             isContinue = scan.next();
+            System.out.println();
         } while (isContinue.equalsIgnoreCase("y"));
 
         DisplayFoodsAndBeverages();

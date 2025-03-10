@@ -1,6 +1,6 @@
 package locationconsumer;
 
-import com.mtit.service.LocationService;
+import locationservice.LocationService;
 
 public class LocationConsumer {
     private LocationService locationService;

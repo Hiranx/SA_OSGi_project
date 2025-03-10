@@ -1,4 +1,4 @@
-package com.mtit.service;
+package locationservice;
 
 public interface LocationService {
 	String[] getAvailableLocations();

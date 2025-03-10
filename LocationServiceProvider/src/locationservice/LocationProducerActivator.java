@@ -1,4 +1,4 @@
-package com.mtit.service;
+package locationservice;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -12,12 +12,12 @@ public class LocationProducerActivator implements BundleActivator {
 	    public void start(BundleContext context) throws Exception {
 	        LocationService locationService = new LocationServiceImpl();
 	        serviceRegistration = context.registerService(LocationService.class, locationService, null);
-	        System.out.println("Location Service Started.");
+	        System.out.println("Standard Location Service Started.");
 	    }
 
 	    @Override
 	    public void stop(BundleContext context) throws Exception {
 	        serviceRegistration.unregister();
-	        System.out.println("Location Service Stopped.");
+	        System.out.println("Standard Location Service Stopped.");
 	    }
 }

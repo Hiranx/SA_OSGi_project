@@ -1,11 +1,11 @@
-package com.mtit.service;
+package locationservice;
 
 public class LocationServiceImpl implements LocationService{
 
 	@Override
 	public String[] getAvailableLocations() {
 		
-		return new String[]{"Hall A", "Hall B", "Conference Room 1", "Outdoor Arena"};
+		return new String[]{"Hotel", "Stadium", "Conference Room", "Outdoor Arena" , "Restaurant"};
 	}
 
 }

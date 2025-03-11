@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Consumer
+Bundle-SymbolicName: MerchandiseConsumer
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: merchandiseconsumer.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: Consumer
+Import-Package: discountservice,
+ merchandiseservie,
+ org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: VipServicePublisher
+Bundle-SymbolicName: VipServicePublisher
+Bundle-Activator: viplocationservice.VIPLocationProducerActivator
+Bundle-Version: 1.0.0.qualifier
+Export-Package: viplocationservice
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+

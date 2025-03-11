@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FoodandBeveragePublisher
+Bundle-SymbolicName: FoodandBeveragePublisher
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: foodandBeverageproducer.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-22
+Automatic-Module-Name: TestProducerEnvironment
+Import-Package: foodinventorypublisher,
+ org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy
+Export-Package: foodandBeverageproducer

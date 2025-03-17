@@ -7,7 +7,7 @@ import merchandiseservie.MerchandiseInterface;
 import merchandiseservie.Item;
 
 public class MerchandiseConsumer {
-    private final MerchandiseInterface merchandiseService;
+	private final MerchandiseInterface merchandiseService;
     private final DiscountInterface discountService;
 
     private static final Map<Integer, List<Item>> merchMap = new HashMap<>();
@@ -140,6 +140,6 @@ public class MerchandiseConsumer {
         } while (numInput != 4);
 
         System.out.println("\nProgram closed");
-        sc.close();
+        
     }
 }

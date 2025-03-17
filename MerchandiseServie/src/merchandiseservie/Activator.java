@@ -5,14 +5,19 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
+    private ServiceRegistration<MerchandiseInterface> registration;
 
+    public void start(BundleContext bundleContext) throws Exception {
+        System.out.println("Merchandise Service Started");
 
-	public void start(BundleContext arg0) throws Exception {
-		System.out.println("Merchandise producer Started");
-	}
+        MerchandiseInterface merchService = new MerchandiseInterfaceImpl();
+        registration = bundleContext.registerService(MerchandiseInterface.class, merchService, null);
+    }
 
-	public void stop(BundleContext arg0) throws Exception {
-		
-	}
-
+    public void stop(BundleContext bundleContext) throws Exception {
+        if (registration != null) {
+            registration.unregister();
+        }
+        System.out.println("Merchandise Service Stopped");
+    }
 }

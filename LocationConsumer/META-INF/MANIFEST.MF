@@ -5,8 +5,9 @@ Bundle-SymbolicName: ServiceSubscriber
 Bundle-Activator: locationconsumer.LocationConsumerActivator
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Import-Package: locationservice,viplocationservice,locationpricingservice,
+Import-Package: locationservice,viplocationservice,locationpricingservice,locationpaymentservice,
  org.osgi.framework;version="1.3.0"
 Require-Bundle: VipServicePublisher;bundle-version="1.0.0",
- LocationPricingProducer;bundle-version="1.0.0"
+ LocationPricingProducer;bundle-version="1.0.0",
+ LocationPaymentService;bundle-version="1.0.0"
 

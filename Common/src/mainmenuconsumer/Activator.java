@@ -11,12 +11,20 @@ import merchandiseconsumer.MerchandiseConsumerActivator;
 import merchandiseservie.MerchandiseInterface;
 import foodandBeverageconsumer.*;
 import foodandBeverageproducer.IFoodandBeverageService;
+
+import event.consumer.EventConsumer;
+import event.producer.EventProviderInterface;
+import sports.producer.SportsEventProviderInterface;
+
+
 public class Activator implements BundleActivator {
 
     private static BundleContext context;
     private ServiceTracker<MerchandiseInterface, MerchandiseInterface> merchTracker;
     private ServiceReference<MerchandiseConsumerActivator> merchConsumerRef;
     private ServiceReference<IFoodandBeverageService> foodServiceReference;
+    private ServiceTracker<EventProviderInterface, EventProviderInterface> eventTracker;
+    private ServiceTracker<SportsEventProviderInterface, SportsEventProviderInterface> sportsEventTracker;
 
 
     static BundleContext getContext() {
@@ -25,6 +33,14 @@ public class Activator implements BundleActivator {
 
     public void start(BundleContext bundleContext) throws Exception {
         Activator.context = bundleContext;
+        
+     // Initialize Event Service Tracker
+        eventTracker = new ServiceTracker<>(bundleContext, EventProviderInterface.class, null);
+        eventTracker.open();
+
+        // Initialize Sports Event Service Tracker
+        sportsEventTracker = new ServiceTracker<>(bundleContext, SportsEventProviderInterface.class, null);
+        sportsEventTracker.open();
 
         // Use a ServiceTracker to wait for the MerchandiseInterface service
         merchTracker = new ServiceTracker<>(bundleContext, MerchandiseInterface.class, null);
@@ -57,9 +73,9 @@ public class Activator implements BundleActivator {
 
             System.out.println("================================================");
             System.out.println("\n\nPlease select an option!\n");
-            System.out.println("1. Merchandise Management");
-            System.out.println("2. Another Management");
-            System.out.println("3. Another Function");
+            System.out.println("1. Event Ticket Booking");
+            System.out.println("2. Merchandise Management");
+            System.out.println("3. Food and Beverages Managment");
             System.out.println("4. Another Function");
             System.out.println("5. Quit \n");
 
@@ -67,16 +83,25 @@ public class Activator implements BundleActivator {
             option = sc.nextInt();
 
             switch (option) {
-                case 1:
+            case 1:
+                // Call the Event Consumer
+                EventProviderInterface eventService = eventTracker.getService();
+                SportsEventProviderInterface sportsEventService = sportsEventTracker.getService();
+
+                if (eventService == null && sportsEventService == null) {
+                    System.err.println("Event services are not available. Please ensure the bundles are active.");
+                } else {
+                    EventConsumer eventConsumer = new EventConsumer(eventService, sportsEventService);
+                    eventConsumer.startBooking();
+                }
+                break;
+                case 2:
                     // Call the displayMenu method of MerchandiseConsumerActivator
                     if (merchConsumer != null) {
                         merchConsumer.displayMenu();
                     } else {
                         System.err.println("MerchandiseConsumer is not available.");
                     }
-                    break;
-                case 2:
-                    // Call Discount Management
                     break;
                 case 3:
                     System.out.println("Starting Food and Beverage Consumer Service...\n");
@@ -137,6 +162,12 @@ public class Activator implements BundleActivator {
         }
         if (merchConsumerRef != null) {
             bundleContext.ungetService(merchConsumerRef);
+        }
+        if (eventTracker != null) {
+            eventTracker.close();
+        }
+        if (sportsEventTracker != null) {
+            sportsEventTracker.close();
         }
         Activator.context = null;
     }

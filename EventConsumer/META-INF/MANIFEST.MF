@@ -11,3 +11,4 @@ Import-Package: event.producer,
  org.osgi.util.tracker;version="[1.5.0,2.0.0)",
  sports.producer
 Bundle-ActivationPolicy: lazy
+Export-Package: event.consumer

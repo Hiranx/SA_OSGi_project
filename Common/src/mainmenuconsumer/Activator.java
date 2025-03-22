@@ -1,19 +1,23 @@
 package mainmenuconsumer;
 
-import merchandiseconsumer.MerchandiseConsumerActivator;
-import merchandiseservie.MerchandiseInterface;
+import java.util.Scanner;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
-import java.util.Scanner;
-
+import merchandiseconsumer.MerchandiseConsumerActivator;
+import merchandiseservie.MerchandiseInterface;
+import foodandBeverageconsumer.*;
+import foodandBeverageproducer.IFoodandBeverageService;
 public class Activator implements BundleActivator {
 
     private static BundleContext context;
     private ServiceTracker<MerchandiseInterface, MerchandiseInterface> merchTracker;
     private ServiceReference<MerchandiseConsumerActivator> merchConsumerRef;
+    private ServiceReference<IFoodandBeverageService> foodServiceReference;
+
 
     static BundleContext getContext() {
         return context;
@@ -75,8 +79,10 @@ public class Activator implements BundleActivator {
                     // Call Discount Management
                     break;
                 case 3:
-                    // Call Another Function
+                    System.out.println("Starting Food and Beverage Consumer Service...\n");
+                    startFoodAndBeverageService(context);
                     break;
+
                 case 4:
                     break;
                 case 5:
@@ -91,6 +97,39 @@ public class Activator implements BundleActivator {
 
         
     }
+    private void startFoodAndBeverageService(BundleContext context) {
+        try {
+            // Retrieve the Food and Beverage Service
+            foodServiceReference = context.getServiceReference(IFoodandBeverageService.class);
+            if (foodServiceReference == null) {
+                System.out.println("Error: Food and Beverage Service is not available.");
+                return;
+            }
+            IFoodandBeverageService foodService = context.getService(foodServiceReference);
+
+            // Retrieve the Food Inventory Service
+            ServiceReference<foodinventorypublisher.FoodInventoryService> inventoryServiceReference =
+                    context.getServiceReference(foodinventorypublisher.FoodInventoryService.class);
+            if (inventoryServiceReference == null) {
+                System.out.println("Error: Food Inventory Service is not available.");
+                return;
+            }
+            foodinventorypublisher.FoodInventoryService inventoryService =
+                    context.getService(inventoryServiceReference);
+
+            // Create an instance of Food and Beverage Consumer Activator
+            foodandBeverageconsumer.Activator foodConsumerActivator = new foodandBeverageconsumer.Activator();
+
+            // Manually call displayMenu method with necessary services
+            foodConsumerActivator.displayMenu(foodService, inventoryService);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     public void stop(BundleContext bundleContext) throws Exception {
         if (merchTracker != null) {

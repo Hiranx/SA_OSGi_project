@@ -32,7 +32,7 @@ public class Activator implements BundleActivator {
         displayMenu(foodService, inventoryService);
     }
 
-    private void displayMenu(IFoodandBeverageService foodService, FoodInventoryService inventoryService) {
+    public void displayMenu(IFoodandBeverageService foodService, FoodInventoryService inventoryService) {
         Scanner scanner = new Scanner(System.in);
         int option;
         

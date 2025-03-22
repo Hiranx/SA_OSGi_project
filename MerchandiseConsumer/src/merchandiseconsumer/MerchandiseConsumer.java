@@ -71,6 +71,7 @@ public class MerchandiseConsumer {
                     case 1 -> "DevOps workshop 2025";
                     case 2 -> "Get Together SLIIT";
                     case 3 -> "Art Exhibition";
+                    
                     default -> {
                         System.out.println("Invalid Event");
                         yield null;

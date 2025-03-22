@@ -13,75 +13,50 @@ import locationpaymentservice.LocationPaymentService;
 
 public class LocationConsumerActivator implements BundleActivator {
     private Scanner scanner;
+    //private LocationConsumer locationConsumer;
 
     @Override
     public void start(BundleContext context) throws Exception {
         scanner = new Scanner(System.in);
 
-        // Get standard locations
-        ServiceReference<LocationService> serviceReference = context.getServiceReference(LocationService.class);
-        if (serviceReference != null) {
-            LocationService locationService = context.getService(serviceReference);
-            System.out.println("Standard Locations:");
-            for (String location : locationService.getAvailableLocations()) {
-                System.out.println("- " + location);
-            }
-        } else {
-            System.out.println("No Standard Location Service Found!");
+        // Get services
+        ServiceReference<LocationService> locationServiceRef = context.getServiceReference(LocationService.class);
+        ServiceReference<VIPLocationService> vipLocationServiceRef = context.getServiceReference(VIPLocationService.class);
+        ServiceReference<LocationPricingService> pricingServiceRef = context.getServiceReference(LocationPricingService.class);
+        ServiceReference<LocationPaymentService> paymentServiceRef = context.getServiceReference(LocationPaymentService.class);
+
+        if (locationServiceRef == null || vipLocationServiceRef == null || pricingServiceRef == null || paymentServiceRef == null) {
+            System.out.println("Required publisher services not found!");
+            return;
         }
 
-        // Get VIP locations
-        ServiceReference<VIPLocationService> vipServiceReference = context.getServiceReference(VIPLocationService.class);
-        if (vipServiceReference != null) {
-            VIPLocationService vipLocationService = context.getService(vipServiceReference);
-            System.out.println("\nVIP Locations:");
-            for (String vipLocation : vipLocationService.getVIPLocations()) {
-                System.out.println("- " + vipLocation);
-            }
-        } else {
-            System.out.println("No VIP Location Service Found!");
-        }
+        LocationService locationService = context.getService(locationServiceRef);
+        VIPLocationService vipLocationService = context.getService(vipLocationServiceRef);
+        LocationPricingService pricingService = context.getService(pricingServiceRef);
+        LocationPaymentService paymentService = context.getService(paymentServiceRef);
 
-        // Get Location Pricing Service
-        ServiceReference<LocationPricingService> pricingServiceReference = context.getServiceReference(LocationPricingService.class);
-        if (pricingServiceReference != null) {
-            LocationPricingService pricingService = context.getService(pricingServiceReference);
-            System.out.println("\nLocation Pricing:");
-            displayPricing(pricingService);
-        } else {
-            System.out.println("No Location Pricing Service Found!");
-        }
+        LocationConsumer locationConsumer = new LocationConsumer(locationService, vipLocationService, pricingService, paymentService);
+        
+        locationConsumer.printTitle();
+        // Show available locations
+        locationConsumer.showAvailableLocations();
 
-        // Get Location Payment Service
-        ServiceReference<LocationPaymentService> paymentServiceReference = context.getServiceReference(LocationPaymentService.class);
-        if (paymentServiceReference != null) {
-            LocationPaymentService paymentService = context.getService(paymentServiceReference);
-            processUserPayments(paymentService);
-        } else {
-            System.out.println("No Location Payment Service Found!");
-        }
-    }
+        // Show pricing details
+        locationConsumer.showLocationPricing();
 
-    private void displayPricing(LocationPricingService pricingService) {
-        System.out.println("Hotel: Rs." + pricingService.getLocationPrice("Hotel"));
-        System.out.println("Stadium: Rs." + pricingService.getLocationPrice("Stadium"));
-        System.out.println("Conference Room: Rs." + pricingService.getLocationPrice("Conference Room"));
-        System.out.println("Outdoor Arena: Rs." + pricingService.getLocationPrice("Outdoor Arena"));
-        System.out.println("Restaurant: Rs." + pricingService.getLocationPrice("Restaurant"));
-
-        System.out.println("\nVIP Location Pricing:");
-        System.out.println("Lotus Tower: Rs." + pricingService.getLocationPrice("Lotus Tower"));
-        System.out.println("VIP Lounge: Rs." + pricingService.getLocationPrice("VIP Lounge"));
-        System.out.println("Exclusive Hall: Rs." + pricingService.getLocationPrice("Exclusive Hall"));
-        System.out.println("Private Suite: Rs." + pricingService.getLocationPrice("Private Suite"));
-    }
-
-    private void processUserPayments(LocationPaymentService paymentService) {
+        // Process payments
         while (true) {
-            System.out.println("\nEnter location name for payment (or type 'exit' to quit): ");
-            String location = scanner.nextLine();
+            System.out.println("\nEnter location number for payment (or type '0' to exit): ");
+            int locationNumber;
 
-            if (location.equalsIgnoreCase("exit")) {
+            try {
+                locationNumber = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                continue;
+            }
+
+            if (locationNumber == 0) {
                 break;
             }
 
@@ -95,18 +70,13 @@ public class LocationConsumerActivator implements BundleActivator {
                 continue;
             }
 
-            boolean success = paymentService.processPayment(location, amount);
-            if (success) {
-                System.out.println("✅ Payment Successful!");
-            } else {
-                System.out.println("❌ Payment Failed!");
-            }
+            locationConsumer.processPayment(locationNumber, amount);
         }
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         System.out.println("Location Consumer Stopped!!!");
-        scanner.close();
+        // Do not close the scanner to avoid closing System.in
     }
 }

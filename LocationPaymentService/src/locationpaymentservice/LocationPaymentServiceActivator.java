@@ -10,14 +10,14 @@ public class LocationPaymentServiceActivator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-    	LocationPaymentService paymentService = new LocationPaymentServiceImpl(null);
+    	LocationPaymentService paymentService = new LocationPaymentServiceImpl();
         serviceRegistration = context.registerService(LocationPaymentService.class, paymentService, null);
-        System.out.println("Payment Service Started.");
+        System.out.println("💳 Payment Service Started.");
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         serviceRegistration.unregister();
-        System.out.println("Payment Service Stopped.");
+        System.out.println("❌ Payment Service Stopped.");
     }
 }

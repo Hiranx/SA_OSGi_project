@@ -12,12 +12,12 @@ public class LocationPricingProducerActivator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
     	LocationPricingService pricingService = new LocationPricingServiceImpl(); 
         serviceRegistration = context.registerService(LocationPricingService.class, pricingService, null);
-        System.out.println("Location Pricing Service Started.");
+        System.out.println("💲 Location Pricing Service Started.");
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         serviceRegistration.unregister();
-        System.out.println("Location Pricing Service Stopped.");
+        System.out.println("❎ Location Pricing Service Stopped.");
     }
 }
